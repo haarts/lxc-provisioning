@@ -1,0 +1,39 @@
+---
+- hosts: all
+  user: harm
+  sudo: no
+  vars:
+    home: /home/harm
+  tasks:
+    - name: get my dotfiles
+      git: repo=https://github.com/haarts/dotfiles.git dest={{ home }}/.dotfiles
+      sudo: no
+
+    # Fish stuff
+    - name: create .config
+      file: path={{ home }}/.config/fish state=directory
+    - name: link Fish functions
+      file: src={{ home }}/.dotfiles/fish/ path={{ home }}/.config/fish/functions state=link
+
+    # Vim stuff
+    - name: link vimrc
+      file: src={{ home }}/.dotfiles/vimrc path={{ home }}/.vimrc state=link
+    - name: create .vim config directory
+      file: path={{ home }}/.vim state=directory
+    - name: links bundles.vim, makes sure vim can initial run without errors
+      file: src={{ home }}/.dotfiles/bundles.vim path={{ home }}/.vim/bundles.vim state=link
+    - file: path={{ home }}/.vim/bundle state=absent
+    - name: Get vundle for harm
+      git: repo=https://github.com/gmarik/vundle.git dest={{ home }}/.vim/bundle/vundle
+    - name: Get all defined bundles
+      command: vim -u {{ home }}/.vim/bundles.vim +BundleInstall +BundleClean +qall
+
+    # Git stuff
+    - name: Link gitconfig
+      file: src={{ home }}/.dotfiles/gitconfig path={{ home }}/.gitconfig state=link
+    - name: Link gitignore
+      file: src={{ home }}/.dotfiles/gitignore path={{ home }}/.gitignore state=link
+
+    # Tmux stuff
+    - name: Link tmux.conf
+      file: src={{ home }}/.dotfiles/tmux.conf path={{ home }}/.tmux.conf state=link
