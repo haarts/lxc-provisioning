@@ -8,7 +8,7 @@
     chromebook_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcV9pZcv4UrapcGDPaa0Y+mlNbReu2U9r9Y18LpyFstvKZR2g1CU46il98+MjEYHOJmYJMxJDndu7zee6vPUVkmXydJAstD362r7Mu/La5pZgRfN0xfOI3ynQVmqRFt00c5WA82FGHAtVn7pAq2VBgBa1y3fuZjtvFiykRFq/HoZreD4HPMzCfyeCLU7zab88WBYGGET8ub5KMM2xeUw0f7eTQEnKZF3RIZpp+JCFeGGhIytOC3GZzIQE3C3rSyyvpVC3MHkr5UQ6i9I7he35pUWwD3H/wdjmFsg0MSwDZfb4iec6YY57pVLUPb9EsFSEOIVMy1qMcYRm0yMx3Bacx chronos@localhost"
   tasks:
     - group: name=admin state=present
-    - copy: src=files/sudoer_admin dest=/etc/sudoers.d/admin_group mode=440
+    - copy: src=files/sudoer_admin dest=/etc/sudoers.d/admin_group mode=440 owner=root group=root
     - name: add harm user
       user: name=harm shell=/usr/bin/fish group=admin
     - name: add chromebook key
